@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ShipAreaController : MonoBehaviour, IPointerDownHandler
 {
@@ -18,6 +19,8 @@ public class ShipAreaController : MonoBehaviour, IPointerDownHandler
     {
         ShipController.SelectedShipArea = OnSelectionArea;
         OnSelectionSprite.color = new Color(OnSelectionSprite.color.r, OnSelectionSprite.color.g, OnSelectionSprite.color.b, 1f);
+        var gos = GameObject.FindGameObjectsWithTag("ShipAreaTitle");
+        foreach (var go in gos) go.GetComponent<Text>().text = OnSelectionArea.ToString();
     }
 
     public void Off()
