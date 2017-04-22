@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 3c00aaedebbddeb45a2638edeaaafce9
+timeCreated: 1492856708
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Galaxy Monkey
+  fontNames:
+  - Galaxy Monkey
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
