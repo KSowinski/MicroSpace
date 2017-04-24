@@ -255,7 +255,7 @@ public class PlayerShipController : MonoBehaviour, IInit
         }
 
         ShipController.Fuel.Update(-1, null);
-        _fuelConsumptionDelay = 0.1f;
+        _fuelConsumptionDelay = 0.5f;
 
         if (ShipController.Fuel.Current <= 0)
         {

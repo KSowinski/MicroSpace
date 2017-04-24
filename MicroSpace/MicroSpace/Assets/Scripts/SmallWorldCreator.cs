@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts;
 using UnityEngine;
 
 public class SmallWorldCreator : MonoBehaviour
@@ -85,6 +86,7 @@ public class SmallWorldCreator : MonoBehaviour
             else if (planets > 2) //minimum required minus 1
             {
                 SpawnPlanet(PlanetPrefab, MoonPrefab, position);
+                Log.Info("Planet");
                 planets--;
             }
             //Other - once we've fulfilled all min object creation we will randomize the rest
