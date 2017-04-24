@@ -13,13 +13,23 @@ public class SmallWorldCreator : MonoBehaviour
     public GameObject AnomalyPrefab;
     public GameObject PlayerShipPrefab;
 
+    //Before version 1
     //Minimum number of objects:
     //2 Wormholes
     //1 Portal
     //1 Asteroid Field
     //1 Planet
     //1 Anomaly
-    private const int MinObjects = 2 + 1 + 1 + 1 + 1;
+    //private const int MinObjects = 2 + 1 + 1 + 1 + 1;
+
+    //After version 1
+    //Minimum number of objects:
+    //2 Wormholes
+    //1 Portal
+    //2 Asteroid Field
+    //3 Planet
+    //3 Anomaly
+    private const int MinObjects = 2 + 1 + 2 + 3 + 3;
 
     //Maximum number of objects:
     //2 Wormholes
@@ -71,56 +81,56 @@ public class SmallWorldCreator : MonoBehaviour
                 portal--;
             }
             //Asteroids
-            else if (asteroids > 1) //minimum required minus 1
+            else if (asteroids > 0) //minimum required minus 1
             {
                 SpawnObject<AsteroidsSpawner>(AsteroidsPrefab, position);
                 asteroids--;
             }
             //Anomaly
-            else if (anomaly > 2) //minimum required minus 1
+            else if (anomaly > 0) //minimum required minus 1
             {
                 SpawnObject<AnomalyController>(AnomalyPrefab, position);
                 anomaly--;
             }
             //Planets
-            else if (planets > 2) //minimum required minus 1
+            else if (planets > 0) //minimum required minus 1
             {
                 SpawnPlanet(PlanetPrefab, MoonPrefab, position);
                 Log.Info("Planet");
                 planets--;
             }
             //Other - once we've fulfilled all min object creation we will randomize the rest
-            else
-            {
-                var created = false;
+            //else
+            //{
+            //    var created = false;
 
-                while (!created)
-                {
-                    var randomChance = Random.Range(1, 101);
+            //    while (!created)
+            //    {
+            //        var randomChance = Random.Range(1, 101);
 
-                    //55% for a planet
-                    if (planets > 0 && randomChance >= 1 && randomChance <= 55)
-                    {
-                        SpawnPlanet(PlanetPrefab, MoonPrefab, position);
-                        planets--;
-                        created = true;
-                    }
-                    //30% for a anomaly
-                    else if (anomaly > 0 && randomChance >= 56 && randomChance <= 85)
-                    {
-                        SpawnObject<AnomalyController>(AnomalyPrefab, position);
-                        anomaly--;
-                        created = true;
-                    }
-                    //15% for a asteroids
-                    else if (asteroids > 0 &&randomChance >= 86 && randomChance <= 100)
-                    {
-                        SpawnObject<AsteroidsSpawner>(AsteroidsPrefab, position);
-                        asteroids--;
-                        created = true;
-                    }
-                }
-            }
+            //        //55% for a planet
+            //        if (planets > 0 && randomChance >= 1 && randomChance <= 55)
+            //        {
+            //            SpawnPlanet(PlanetPrefab, MoonPrefab, position);
+            //            planets--;
+            //            created = true;
+            //        }
+            //        //30% for a anomaly
+            //        else if (anomaly > 0 && randomChance >= 56 && randomChance <= 85)
+            //        {
+            //            SpawnObject<AnomalyController>(AnomalyPrefab, position);
+            //            anomaly--;
+            //            created = true;
+            //        }
+            //        //15% for a asteroids
+            //        else if (asteroids > 0 &&randomChance >= 86 && randomChance <= 100)
+            //        {
+            //            SpawnObject<AsteroidsSpawner>(AsteroidsPrefab, position);
+            //            asteroids--;
+            //            created = true;
+            //        }
+            //    }
+            //}
         }
     }
 
@@ -179,7 +189,8 @@ public class SmallWorldCreator : MonoBehaviour
         }
 
         //Remove random positions
-        var currentObjectCount = Random.Range(MinObjects, MaxObjects + 2); //1 extra for player start point
+        //var currentObjectCount = Random.Range(MinObjects, MaxObjects + 2); //1 extra for player start point <<< in ver 1
+        var currentObjectCount = MinObjects + 1;
         while (list.Count > currentObjectCount) list.RemoveAt(Random.Range(0, list.Count));
 
         return list;
