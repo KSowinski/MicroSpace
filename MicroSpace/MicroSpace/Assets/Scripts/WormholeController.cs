@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WormholeController : MonoBehaviour, IInit
 {
@@ -43,5 +41,17 @@ public class WormholeController : MonoBehaviour, IInit
         }
        
         transform.Rotate(Vector3.forward * Time.deltaTime * _rotSpeed * (RotateRight ? 1f : -1f));
+
+
+        //Check if player is inside
+        if (!tag.Equals("WormholeIn")) return;
+        var playerShip = GameObject.FindGameObjectWithTag("Player");
+        var psc = playerShip.GetComponent<PlayerShipController>();
+        var distance = Vector2.Distance(playerShip.transform.position, transform.position);
+        var inRange = distance < 0.5f;
+        if(psc.IsTeleporting() == false && inRange)
+        {
+            psc.UseWormhole();
+        }
     }
 }

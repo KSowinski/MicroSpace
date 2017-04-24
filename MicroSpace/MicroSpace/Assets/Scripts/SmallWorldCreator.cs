@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 
 public class SmallWorldCreator : MonoBehaviour
 {
@@ -29,12 +27,6 @@ public class SmallWorldCreator : MonoBehaviour
     //3 Anomaly
     //3 Planet
     private const int MaxObjects = 2 + 1 + 2 + 3 + 3;
-    
-    //TODO Temp start for testing
-    public void Start()
-    {
-        Create();
-    }
 
     public void Create()
     {

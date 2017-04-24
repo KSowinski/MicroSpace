@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using Assets.Scripts;
 
 public class NebulaController : MonoBehaviour
 {
@@ -10,8 +8,9 @@ public class NebulaController : MonoBehaviour
 
     public void Start()
     {
-        transform.GetComponent<Renderer>().sortingLayerID = 1;
-        transform.GetComponent<Renderer>().sortingOrder = 100;
+        //transform.GetComponent<Renderer>().sortingLayerID = 1;
+        //transform.GetComponent<Renderer>().sortingOrder = 1;
+        
 
         //Random texture
         transform.GetComponent<MeshRenderer>().materials = new Material[]

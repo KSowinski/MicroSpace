@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+
 public class Stat
 {
     public int Current { get; set; }
@@ -22,6 +23,12 @@ public class Stat
         _addPerc = addPerc;
     }
 
+    public void MaxOut()
+    {
+        Current = Max;
+        UpdateVisuals(null);
+    }
+
     public void Update(int? current, int? max)
     {
         //Update vars
@@ -38,6 +45,11 @@ public class Stat
             if (Current > Max) Current = Max;
         } 
         
+        UpdateVisuals(current);
+    }
+
+    private void UpdateVisuals(int? current)
+    {
         //Update visuals
         if (!string.IsNullOrEmpty(_sliderTag))
         {
@@ -52,7 +64,16 @@ public class Stat
             var newText = _showMax
                 ? string.Format("{0}{2} / {1}{2}", Current, Max, _addPerc ? "%" : string.Empty)
                 : string.Format("{0}{1}", Current, _addPerc ? "%" : string.Empty);
-            foreach (var go in gos) go.GetComponent<Text>().text = newText;
+            foreach (var go in gos)
+            {
+                go.GetComponent<Text>().text = newText;
+
+                //Particle Effect
+                if (current.HasValue && current.Value > 0 && go.transform.GetComponent<UIParticleEffect>() != null)
+                {
+                    go.transform.GetComponent<UIParticleEffect>().Show();
+                }
+            }
         }
     }
 }

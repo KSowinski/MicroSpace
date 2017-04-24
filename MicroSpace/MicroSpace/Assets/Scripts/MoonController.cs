@@ -7,7 +7,7 @@ public class MoonController : MonoBehaviour
     private float _rotSpeed;
     private bool _orbitRight;
     private float _radius;
-    private Transform _centerPlanet;
+    public Transform CenterPlanet;
     
     public void Init(bool isSecondMoon, Transform centerPlanet)
     {
@@ -50,13 +50,13 @@ public class MoonController : MonoBehaviour
         //Set parent
         transform.SetParent(centerPlanet);
 
-        _centerPlanet = centerPlanet;
+        CenterPlanet = centerPlanet;
     }
 
 
     void Update()
     {
         transform.Rotate(Vector3.forward * Time.deltaTime * _rotSpeed * 1.5f * (_orbitRight ? -1f : 1f));
-        transform.RotateAround(_centerPlanet.position, Vector3.forward, (_orbitRight ? 1f : -1f) *_rotSpeed * Time.deltaTime);
+        transform.RotateAround(CenterPlanet.position, Vector3.forward, (_orbitRight ? 1f : -1f) *_rotSpeed * Time.deltaTime);
     }
 }
