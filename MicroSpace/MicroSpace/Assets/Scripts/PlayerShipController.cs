@@ -157,7 +157,8 @@ public class PlayerShipController : MonoBehaviour, IInit
 
     private void ShipMovementControl()
     {
-        if (Inpt.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        //if (Inpt.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Inpt.GetMouseButton(0) && IsInputInShipUI() == false)
         {
             _mousePosition = Camera.main.ScreenToWorldPoint(Inpt.MousePosition());
             _mousePosition = new Vector3(_mousePosition.x, _mousePosition.y, 0f);
@@ -181,6 +182,14 @@ public class PlayerShipController : MonoBehaviour, IInit
         }
     }
 
+    private static bool IsInputInShipUI()
+    {
+        var inputPos = Camera.main.ScreenToWorldPoint(Inpt.MousePosition());
+        var bounds = GameObject.Find("ShipUIOverlay").transform.GetComponent<SpriteRenderer>().bounds;
+        var a = bounds.Contains(new Vector3(inputPos.x, inputPos.y, 0f));
+        return a;
+    }
+
     private void MoveShip()
     {
         if (!_newPoint) return;
@@ -199,7 +208,7 @@ public class PlayerShipController : MonoBehaviour, IInit
         //ROTATE
         if (!isAngleSet)
         {
-            var rotationSpeed = 2.25f + ShipController.Thrusters.Current*0.25f;
+            var rotationSpeed = 2.5f + ShipController.Thrusters.Current*0.25f;
             var quaternion = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, _angle), rotationSpeed * Time.deltaTime);
             transform.rotation = quaternion;
 
@@ -232,7 +241,7 @@ public class PlayerShipController : MonoBehaviour, IInit
         if (dist > 0.25f)
         {
             _moveProgress += Time.deltaTime * (0.1f + ShipController.Thrusters.Current * 0.05f);
-            var position = Vector2.Lerp(_startPosition, _mousePosition, _moveProgress);
+            var position = Vector2.MoveTowards(transform.position, _mousePosition, 0.025f);
             transform.position = position;
             MovingParticles.SetActive(true);
             ConsumeFuel();
@@ -276,8 +285,8 @@ public class PlayerShipController : MonoBehaviour, IInit
         if (coll.gameObject.name.Contains("Asteroid") || coll.gameObject.name.Contains("Moon"))
         {
             Instantiate(DamageEffect, coll.contacts.First().point, Quaternion.identity);
-            _damageDelay = 0.25f;
-            DoDamage(10);
+            _damageDelay = 0.5f;
+            DoDamage(1);
         }
         else if (coll.collider.name.Contains("EnemyBullet"))
         {

@@ -12,32 +12,14 @@ public class SmallWorldCreator : MonoBehaviour
     public GameObject AsteroidsPrefab;
     public GameObject AnomalyPrefab;
     public GameObject PlayerShipPrefab;
-
-    //Before version 1
+    
     //Minimum number of objects:
     //2 Wormholes
     //1 Portal
-    //1 Asteroid Field
-    //1 Planet
-    //1 Anomaly
-    //private const int MinObjects = 2 + 1 + 1 + 1 + 1;
-
-    //After version 1
-    //Minimum number of objects:
-    //2 Wormholes
-    //1 Portal
-    //2 Asteroid Field
+    //5 Asteroid Field
     //3 Planet
     //3 Anomaly
-    private const int MinObjects = 2 + 1 + 2 + 3 + 3;
-
-    //Maximum number of objects:
-    //2 Wormholes
-    //1 Portal
-    //2 Asteroid Field
-    //3 Anomaly
-    //3 Planet
-    private const int MaxObjects = 2 + 1 + 2 + 3 + 3;
+    private const int MaxObjects = 2 + 1 + 5 + 3 + 3;
 
     public void Create()
     {
@@ -47,7 +29,7 @@ public class SmallWorldCreator : MonoBehaviour
         var wormholeIn = 1;
         var wormholeOut = 1;
         var portal = 1;
-        var asteroids = 2;
+        var asteroids = 5;
         var anomaly = 3;
         var planets = 3;
 
@@ -99,38 +81,6 @@ public class SmallWorldCreator : MonoBehaviour
                 Log.Info("Planet");
                 planets--;
             }
-            //Other - once we've fulfilled all min object creation we will randomize the rest
-            //else
-            //{
-            //    var created = false;
-
-            //    while (!created)
-            //    {
-            //        var randomChance = Random.Range(1, 101);
-
-            //        //55% for a planet
-            //        if (planets > 0 && randomChance >= 1 && randomChance <= 55)
-            //        {
-            //            SpawnPlanet(PlanetPrefab, MoonPrefab, position);
-            //            planets--;
-            //            created = true;
-            //        }
-            //        //30% for a anomaly
-            //        else if (anomaly > 0 && randomChance >= 56 && randomChance <= 85)
-            //        {
-            //            SpawnObject<AnomalyController>(AnomalyPrefab, position);
-            //            anomaly--;
-            //            created = true;
-            //        }
-            //        //15% for a asteroids
-            //        else if (asteroids > 0 &&randomChance >= 86 && randomChance <= 100)
-            //        {
-            //            SpawnObject<AsteroidsSpawner>(AsteroidsPrefab, position);
-            //            asteroids--;
-            //            created = true;
-            //        }
-            //    }
-            //}
         }
     }
 
@@ -190,7 +140,7 @@ public class SmallWorldCreator : MonoBehaviour
 
         //Remove random positions
         //var currentObjectCount = Random.Range(MinObjects, MaxObjects + 2); //1 extra for player start point <<< in ver 1
-        var currentObjectCount = MinObjects + 1;
+        var currentObjectCount = MaxObjects + 1;
         while (list.Count > currentObjectCount) list.RemoveAt(Random.Range(0, list.Count));
 
         return list;

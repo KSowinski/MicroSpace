@@ -48,11 +48,11 @@ public class PlanetController : MonoBehaviour, IInit, IPointerDownHandler
         var name = GetRandomName();
         var rr = Random.Range(1, 101) <= 75 ? Random.Range(5, 16) : default(int?);  //75% chance to exsit with price between 5-15
         var re = Random.Range(3, 11);
-        var us = Random.Range(1, 101) <= 50 ? Random.Range(10, 26) : default(int?);
-        var uh = Random.Range(1, 101) <= 50 ? Random.Range(10, 26) : default(int?);
-        var uw = Random.Range(1, 101) <= 25 ? Random.Range(25, 51) : default(int?);
-        var ut = Random.Range(1, 101) <= 40 ? Random.Range(15, 31) : default(int?);
-        var sp = Random.Range(1, 101) <= 15 ? Random.Range(10, 26) : default(int?);
+        var us = Random.Range(1, 101) <= 75 ? Random.Range(10, 26) : default(int?);
+        var uh = Random.Range(1, 101) <= 75 ? Random.Range(10, 26) : default(int?);
+        var uw = Random.Range(1, 101) <= 60 ? Random.Range(25, 51) : default(int?);
+        var ut = Random.Range(1, 101) <= 60 ? Random.Range(15, 31) : default(int?);
+        var sp = Random.Range(1, 101) <= 25 ? Random.Range(10, 26) : default(int?);
         
         return new PlanetServices()
         {
@@ -101,7 +101,7 @@ public class PlanetController : MonoBehaviour, IInit, IPointerDownHandler
         //Beam controll
         if (ShipController.SelectedShipArea == SelectedShipArea.Comms)
         {
-            if (Vector3.Distance(transform.position, ShipController.ShipPosition) <= 1f)
+            if (Vector3.Distance(transform.position, ShipController.ShipPosition) <= 1.5f)
             {
                 if (Inpt.GetMouseButton(0))
                 {

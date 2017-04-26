@@ -14,7 +14,7 @@ public class EnemyShipController : MonoBehaviour
     public void Init(int wave)
     {
         transform.GetComponent<SpriteRenderer>().color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
-        _hp = 10 + (wave * 5);
+        _hp = 5 + (wave * 2);
     }
 
     void Update()

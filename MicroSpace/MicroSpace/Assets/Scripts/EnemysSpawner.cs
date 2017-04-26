@@ -15,7 +15,7 @@ public class EnemysSpawner : MonoBehaviour
 
     private float _time;
     private int _wave;
-    private float _waveDelay = 30f;//30f
+    private float _waveDelay = 60f;
     private bool _alreadySpawned;
 
     // Use this for initialization
@@ -40,22 +40,22 @@ public class EnemysSpawner : MonoBehaviour
         //New Wave
         else if (_time <= 0f)
         {
-            if(_alreadySpawned) return;
-            
-            TimesText1.SetActive(false);
-            TimesText2.SetActive(false);
-            SpawnEnemies();
-            _wave++;
-            _alreadySpawned = true;
+            if (!_alreadySpawned)
+            {
 
-            StartCoroutine(DelayedRestart());
+                TimesText1.SetActive(false);
+                TimesText2.SetActive(false);
+                SpawnEnemies();
+                _wave++;
+                _alreadySpawned = true;
+            }
+
+            //Restart once there are no enemies
+            if (GameObject.FindObjectsOfType<EnemyShipController>().Length == 0)
+            {
+                ResetTimer();
+            }
         }
-    }
-    
-    private IEnumerator DelayedRestart()
-    {
-        yield return new WaitForSeconds(5f);
-        ResetTimer();
     }
 
     private void ResetTimer()
@@ -63,7 +63,7 @@ public class EnemysSpawner : MonoBehaviour
         _alreadySpawned = false;
         TimesText1.SetActive(true);
         TimesText2.SetActive(true);
-        _time = _waveDelay;
+        _time = Mathf.Max(_waveDelay - ((_wave - 1)*5f), 10f);
         UpdateText();
     }
 
@@ -85,7 +85,7 @@ public class EnemysSpawner : MonoBehaviour
     {
         for (var i = 1; i <= _wave + 1; i++)
         {
-            var rndPos = RandomCircle(transform.position, new Vector2(0.5f, 0.5f));
+            var rndPos = RandomCircle(transform.position, new Vector2(0.75f, 0.75f));
             var rndEnemy = Random.Range(1, 4);
             GameObject enemy = null;
             if (rndEnemy == 1) enemy = Instantiate(Enemy1, rndPos, Quaternion.identity);

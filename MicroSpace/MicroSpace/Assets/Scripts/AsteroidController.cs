@@ -1,4 +1,6 @@
-﻿using Assets.Scripts;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,7 +11,7 @@ public class AsteroidController : MonoBehaviour, IPointerDownHandler
 
     private bool _rotateRight;
     private float _rotSpeed;
-    private Resource _resources;
+    private List<Resource> _resources;
     
     public void Init()
     {
@@ -32,10 +34,26 @@ public class AsteroidController : MonoBehaviour, IPointerDownHandler
         //Add collider
         transform.gameObject.AddComponent<PolygonCollider2D>();
 
-        //Set Asteroid Resource
-        var resourceType = Random.Range(1, 101) >= 51 ? ResourceType.Fuel : ResourceType.Titanium;
-        var resourceAmount = sizeInt*2;
-        _resources = new Resource() { Amount = resourceAmount, Type = resourceType, SourceDestroyed = false };
+        //Set Asteroid Resources
+        _resources = new List<Resource>();
+        var fuelFirst = Random.Range(1, 101) >= 51;
+
+        if (fuelFirst)
+        {
+            var fuelAmount = Random.Range(sizeInt * 2, sizeInt * 3 + 1);
+            _resources.Add(new Resource() { Amount = fuelAmount, Type = ResourceType.Fuel, SourceDestroyed = false });
+
+            var titaniumAmount = Random.Range(sizeInt * 2, sizeInt * 3 + 1);
+            _resources.Add(new Resource() { Amount = titaniumAmount, Type = ResourceType.Titanium, SourceDestroyed = false });
+        }
+        else
+        {
+            var titaniumAmount = Random.Range(sizeInt * 2, sizeInt * 3 + 1);
+            _resources.Add(new Resource() { Amount = titaniumAmount, Type = ResourceType.Titanium, SourceDestroyed = false });
+
+            var fuelAmount = Random.Range(sizeInt * 2, sizeInt * 3 + 1);
+            _resources.Add(new Resource() { Amount = fuelAmount, Type = ResourceType.Fuel, SourceDestroyed = false });
+        }
     }
 
     void Update()
@@ -48,7 +66,7 @@ public class AsteroidController : MonoBehaviour, IPointerDownHandler
         //Beam controll
         if (ShipController.SelectedShipArea == SelectedShipArea.Beam)
         {
-            if (Vector3.Distance(transform.position, ShipController.ShipPosition) <= 1f)
+            if (Vector3.Distance(transform.position, ShipController.ShipPosition) <= 1.25f)
             {
                 if (Inpt.GetMouseButton(0))
                 {
@@ -65,14 +83,21 @@ public class AsteroidController : MonoBehaviour, IPointerDownHandler
     public Resource ExtractResource()
     {
         var extractedAmount = Random.Range(5, 16); //5-15
-        if (_resources.Amount > extractedAmount)
-        {
-            _resources.Amount -= extractedAmount;
-            return new Resource() { Amount = extractedAmount, Type = _resources.Type, SourceDestroyed = false };
-        }
+        var resource = _resources[0].Amount > 0 ? _resources[0] : _resources[1];
 
-        DestroySelf();
-        return new Resource() { Amount = _resources.Amount, Type = _resources.Type, SourceDestroyed = true};
+        if (resource.Amount > extractedAmount)
+        {
+            resource.Amount -= extractedAmount;
+            return new Resource() { Amount = extractedAmount, Type = resource.Type, SourceDestroyed = false };
+        }
+        
+        extractedAmount = resource.Amount;
+        resource.Amount = 0;
+
+        var anyLeft = _resources.Any(x => x.Amount > 0);
+        if (!anyLeft) DestroySelf();
+
+        return new Resource() { Amount = extractedAmount, Type = resource.Type, SourceDestroyed = !anyLeft };
     }
 
     private void DestroySelf()

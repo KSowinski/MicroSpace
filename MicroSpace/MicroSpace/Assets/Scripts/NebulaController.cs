@@ -8,8 +8,8 @@ public class NebulaController : MonoBehaviour
 
     public void Start()
     {
-        //transform.GetComponent<Renderer>().sortingLayerID = 1;
-        //transform.GetComponent<Renderer>().sortingOrder = 1;
+        transform.GetComponent<Renderer>().sortingLayerID = 1;
+        transform.GetComponent<Renderer>().sortingOrder = 1;
         
 
         //Random texture
