@@ -4,7 +4,7 @@ namespace Assets.Scripts
 {
     public static class Log
     {
-        private static bool _isEnabled = true;
+        private static bool _isEnabled = false;
 
         public static void Info(string msg)
         {

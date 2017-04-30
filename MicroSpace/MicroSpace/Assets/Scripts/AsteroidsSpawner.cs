@@ -6,7 +6,6 @@ public class AsteroidsSpawner : MonoBehaviour, IInit
     
     public void Init()
     {
-        //var count = Random.Range(8, 13);
         var count = Random.Range(3, 7);
         for (var i = 1; i <= count; i++)
         {

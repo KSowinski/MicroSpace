@@ -17,10 +17,8 @@ public class PlayerShipController : MonoBehaviour, IInit
     public GameObject[] FirePoints;
 
     private Vector3 _mousePosition;
-    private float _moveProgress = 0f;
     private float _angle;
     private bool _newPoint = false;
-    private Vector3 _startPosition;
     private GameObject _marker;
     private float _previousAngle;
     private float _damageDelay = 0.5f;
@@ -165,8 +163,6 @@ public class PlayerShipController : MonoBehaviour, IInit
             _angle = (Mathf.Atan2(_mousePosition.y - transform.position.y, _mousePosition.x - transform.position.x)*
                       Mathf.Rad2Deg);
             _angle = (_angle < 0f) ? _angle + 360f : _angle;
-            _startPosition = transform.position;
-            _moveProgress = 0f;
             _newPoint = true;
             _previousAngle = transform.eulerAngles.z;
 
@@ -240,8 +236,7 @@ public class PlayerShipController : MonoBehaviour, IInit
         var dist = Vector2.Distance(transform.position, _mousePosition);
         if (dist > 0.25f)
         {
-            _moveProgress += Time.deltaTime * (0.1f + ShipController.Thrusters.Current * 0.05f);
-            var position = Vector2.MoveTowards(transform.position, _mousePosition, 0.025f);
+            var position = Vector2.MoveTowards(transform.position, _mousePosition, 0.020f + (ShipController.Thrusters.Current * 0.005f));
             transform.position = position;
             MovingParticles.SetActive(true);
             ConsumeFuel();

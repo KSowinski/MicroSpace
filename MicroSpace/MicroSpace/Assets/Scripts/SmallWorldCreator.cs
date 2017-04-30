@@ -14,20 +14,20 @@ public class SmallWorldCreator : MonoBehaviour
     public GameObject PlayerShipPrefab;
     
     //Minimum number of objects:
+    //1 Player
     //2 Wormholes
     //1 Portal
     //5 Asteroid Field
     //3 Planet
     //3 Anomaly
-    private const int MaxObjects = 2 + 1 + 5 + 3 + 3;
+    private const int MaxObjects = 1 + 2 + 1 + 5 + 3 + 3;
 
     public void Create()
     {
-        var positions = GetPositionSlots();
+        var positions = GetPositionSlots(MaxObjects);
 
         var player = 1;
-        var wormholeIn = 1;
-        var wormholeOut = 1;
+        var wormholes = 1;
         var portal = 1;
         var asteroids = 5;
         var anomaly = 3;
@@ -37,49 +37,56 @@ public class SmallWorldCreator : MonoBehaviour
         {
             var randomPosition = Random.Range(0, positions.Count);
             var position = positions[randomPosition];
-            positions.RemoveAt(randomPosition);
 
             //Player
             if (player > 0)
             {
                 SpawnObject<PlayerShipController>(PlayerShipPrefab, position);
                 player--;
+                positions.RemoveAt(randomPosition);
             }
             //Wormholes
-            else if (wormholeIn > 0)
+            else if (wormholes > 0)
             {
-                SpawnObject<WormholeController>(WormholeInPrefab, position);
-                wormholeIn--;
-            }
-            else if(wormholeOut > 0)
-            {
-                SpawnObject<WormholeController>(WormholeOutPrefab, position);
-                wormholeOut--;
+                var randomPosition2 = Random.Range(0, positions.Count-1);
+                var secondPosition = positions[randomPosition2];
+                if (Vector2.Distance(position, secondPosition) > 5f)
+                {
+                    SpawnObject<WormholeController>(WormholeInPrefab, position);
+                    SpawnObject<WormholeController>(WormholeOutPrefab, secondPosition);
+                    positions.RemoveAt(randomPosition);
+                    positions.RemoveAt(randomPosition2);
+                    wormholes--;
+                }
             }
             //Portal
             else if (portal > 0)
             {
                 SpawnObject<PortalController>(PortalPrefab, position);
                 portal--;
+                positions.RemoveAt(randomPosition);
             }
             //Asteroids
-            else if (asteroids > 0) //minimum required minus 1
+            else if (asteroids > 0)
             {
                 SpawnObject<AsteroidsSpawner>(AsteroidsPrefab, position);
                 asteroids--;
+                positions.RemoveAt(randomPosition);
             }
             //Anomaly
-            else if (anomaly > 0) //minimum required minus 1
+            else if (anomaly > 0)
             {
                 SpawnObject<AnomalyController>(AnomalyPrefab, position);
                 anomaly--;
+                positions.RemoveAt(randomPosition);
             }
             //Planets
-            else if (planets > 0) //minimum required minus 1
+            else if (planets > 0)
             {
                 SpawnPlanet(PlanetPrefab, MoonPrefab, position);
                 Log.Info("Planet");
                 planets--;
+                positions.RemoveAt(randomPosition);
             }
         }
     }
@@ -114,7 +121,7 @@ public class SmallWorldCreator : MonoBehaviour
         return obj;
     }
 
-    private List<Vector3> GetPositionSlots()
+    private List<Vector3> GetPositionSlots(int maxObjCount)
     {
         const int xDiv = 7;
         const int yDiv = 5;
@@ -139,9 +146,7 @@ public class SmallWorldCreator : MonoBehaviour
         }
 
         //Remove random positions
-        //var currentObjectCount = Random.Range(MinObjects, MaxObjects + 2); //1 extra for player start point <<< in ver 1
-        var currentObjectCount = MaxObjects + 1;
-        while (list.Count > currentObjectCount) list.RemoveAt(Random.Range(0, list.Count));
+        while (list.Count > maxObjCount) list.RemoveAt(Random.Range(0, list.Count));
 
         return list;
     }
@@ -156,5 +161,17 @@ public class SmallWorldCreator : MonoBehaviour
         return pos;
     }
 
+    public GameObject SpawnAsteroidsAtRandom()
+    {
+        var positions = GetPositionSlots(5*7);
+        while (true)
+        {
+            var randomPosition = Random.Range(0, positions.Count);
+            var position = positions[randomPosition];
+            if (!(Vector2.Distance(position, ShipController.ShipPosition) > 5f)) continue;
+            var newAsteroids = SpawnObject<AsteroidsSpawner>(AsteroidsPrefab, position);
+            return newAsteroids;
+        }
+    }
 }
 

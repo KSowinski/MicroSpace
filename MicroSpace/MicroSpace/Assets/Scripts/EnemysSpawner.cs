@@ -107,6 +107,6 @@ public class EnemysSpawner : MonoBehaviour
 
     public void ScramblePortal()
     {
-        _time += 10f;
+        _time += 25f;
     }
 }

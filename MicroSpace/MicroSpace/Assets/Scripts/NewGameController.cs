@@ -23,7 +23,7 @@ public class NewGameController : MonoBehaviour
 
     public void Update()
     {
-        if (Inpt.GetKeyDown(KeyCode.F12))
+        if (Inpt.GetKeyDown(KeyCode.F1))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
